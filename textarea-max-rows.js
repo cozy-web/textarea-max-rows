@@ -72,8 +72,18 @@ function patchTextarea(element) {
       }
     }
 
-    element.setAttribute('rows', shadowElement.getAttribute('rows'))
+    const oldRows = element.getAttribute('rows')
+    const newRows = shadowElement.getAttribute('rows')
+    element.setAttribute('rows', newRows)
+
+    if (oldRows !== newRows) {
+      const event = new CustomEvent('rows-change', {
+        detail: { rows: Number.parseInt(newRows) },
+      })
+      element.dispatchEvent(event)
+    }
   })
+
   element.dispatchEvent(new Event('input'))
 }
 
