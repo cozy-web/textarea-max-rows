@@ -4,5 +4,6 @@
 
 An improved version of [`max-rows` attribute support of <textarea></textarea>](https://gist.github.com/hubgit/e08998bf2dfdec556b2726d13035cd2c):
 
-- vanilla JavaScript
-- robust caculation of rows number
+- use vanilla JavaScript.
+- more robust caculation of `rows` attribute.
+- add rows changing event - `rows-change`
