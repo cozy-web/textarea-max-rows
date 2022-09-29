@@ -47,7 +47,7 @@ function patchTextarea(element) {
 
   const shadowElement = createElement('textarea', {
     class: attrClass,
-    style: `box-sizing: border-box; ${attrStyle}`,
+    style: `box-sizing: border-box !important; ${attrStyle}`,
     rows: attrRows,
     'max-rows': attrMaxRows,
   })
