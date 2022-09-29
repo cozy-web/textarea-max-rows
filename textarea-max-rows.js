@@ -88,6 +88,11 @@ function patchTextarea(element) {
 }
 
 window.addEventListener('load', () => {
-  const textareas = document.querySelectorAll('textarea[max-rows]')
-  Array.prototype.forEach.call(textareas, patchTextarea)
+  const element = document.querySelector('textarea[max-rows]')
+
+  element.addEventListener('rows-change', (e) => {
+    console.log(e.detail)
+  })
+
+  patchTextarea(element)
 })
