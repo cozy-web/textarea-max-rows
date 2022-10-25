@@ -117,6 +117,12 @@ function patchTextareaMaxRowsSupport(element, { shadowElement = null } = {}) {
     },
     set(value) {
       set.call(this, value)
+
+      const event = new CustomEvent('value-change', {
+        detail: { value: value },
+      })
+      element.dispatchEvent(event)
+
       syncRows()
     },
   })

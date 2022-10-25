@@ -7,6 +7,7 @@ An improved version of [`max-rows` attribute support of <textarea></textarea>](h
 - use vanilla JavaScript.
 - use more robust caculation of `rows` attribute.
 - add rows changing event - `rows-change`
+- add value changing event - `value-change`
 - handle edge conditions, such as:
   - resizing
   - unmatched box-sizing
