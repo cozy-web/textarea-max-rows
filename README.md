@@ -7,7 +7,11 @@ An improved version of [`max-rows` attribute support of <textarea></textarea>](h
 - use vanilla JavaScript.
 - use more robust caculation of `rows` attribute.
 - add rows changing event - `rows-change`
-- handle edge conditions, such as resizing, unmatched box-sizing, etc.
+- handle edge conditions, such as:
+  - resizing
+  - unmatched box-sizing
+  - changing `value` attribute
+  - ...
 
 ## Dependencies
 
@@ -20,6 +24,8 @@ An improved version of [`max-rows` attribute support of <textarea></textarea>](h
 ## Create an NPM package?
 
 Because this isn't a very universal solution, I am not going to do that.
+
+> Currently, `textarea-max-rows.js` has been implemented as an ES module. It would be very easy to publish it as an NPM package.
 
 ## License
 
