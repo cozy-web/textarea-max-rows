@@ -18,12 +18,11 @@
 
       window.addEventListener('load', () => {
         const element = document.querySelector('textarea[max-rows]')
+        patchTextareaMaxRowsSupport(element)
 
         element.addEventListener('rows-change', (e) => {
           console.log(e.detail)
         })
-
-        patchTextareaMaxRowsSupport(element)
       })
     </script>
   </body>
