@@ -10,6 +10,16 @@ function createElement(tagName, attributes) {
   return element
 }
 
+function shapeElement(element, attributes) {
+  for (const [key, value] of Object.entries(attributes)) {
+    if (value) {
+      element.setAttribute(key, value)
+    }
+  }
+
+  return element
+}
+
 function moveElementOffscreen(element) {
   const move = () => {
     element.style.position = 'absolute'
@@ -36,7 +46,7 @@ function insertAfter(newNode, existingNode) {
   existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling)
 }
 
-function patchTextarea(element) {
+function patchTextareaMaxRowsSupport(element, { shadowElement = null } = {}) {
   const attrClass = element.getAttribute('class')
   const attrStyle = element.getAttribute('style')
   const attrRows = element.getAttribute('rows') || 1
@@ -45,17 +55,28 @@ function patchTextarea(element) {
   const minRows = Number.parseInt(attrRows)
   const maxRows = Number.parseInt(attrMaxRows)
 
-  const shadowElement = createElement('textarea', {
+  const shouldInsertShadowElement = !shadowElement
+
+  const attributes = {
     class: attrClass,
     style: `box-sizing: border-box !important; ${attrStyle}`,
     rows: attrRows,
     'max-rows': attrMaxRows,
-  })
+  }
+
+  if (shadowElement) {
+    shadowElement = shapeElement(shadowElement, attributes)
+  } else {
+    shadowElement = createElement('textarea', attributes)
+  }
+
   moveElementOffscreen(shadowElement)
   syncWidthFrom(shadowElement, element)
-  insertAfter(shadowElement, element)
+  if (shouldInsertShadowElement) {
+    insertAfter(shadowElement, element)
+  }
 
-  element.addEventListener('input', function () {
+  function syncRows() {
     // copy the content from the real textarea
     shadowElement.value = element.value
 
@@ -82,17 +103,23 @@ function patchTextarea(element) {
       })
       element.dispatchEvent(event)
     }
+  }
+
+  element.addEventListener('input', () => {
+    syncRows()
   })
 
-  element.dispatchEvent(new Event('input'))
+  // override original getter and setter in order to call syncRows() when the value is set by JavaScript.
+  const { get, set } = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')
+  Object.defineProperty(element, 'value', {
+    get() {
+      return get.call(this)
+    },
+    set(value) {
+      set.call(this, value)
+      syncRows()
+    },
+  })
 }
 
-window.addEventListener('load', () => {
-  const element = document.querySelector('textarea[max-rows]')
-
-  element.addEventListener('rows-change', (e) => {
-    console.log(e.detail)
-  })
-
-  patchTextarea(element)
-})
+export default patchTextareaMaxRowsSupport

@@ -5,7 +5,6 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="textarea-max-rows.js"></script>
     <style>textarea { width: 100%; }</style>
   </head>
   <body>
@@ -14,5 +13,18 @@
       max-rows="3"
       placeholder="Enter content to see the textarea expanding"
     ></textarea>
+    <script type="module">
+      import patchTextareaMaxRowsSupport from './textarea-max-rows.js'
+
+      window.addEventListener('load', () => {
+        const element = document.querySelector('textarea[max-rows]')
+
+        element.addEventListener('rows-change', (e) => {
+          console.log(e.detail)
+        })
+
+        patchTextareaMaxRowsSupport(element)
+      })
+    </script>
   </body>
 </html>
